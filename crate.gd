@@ -34,7 +34,13 @@ func _process(_delta):
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("destroy"):
-		if in_machine:
+		if not in_machine:
+			return
+		if not dangerous:
+			Globals.failures += 1
+			queue_free()
+		else:
+			Globals.sucesses += 1
 			queue_free()
 
 
