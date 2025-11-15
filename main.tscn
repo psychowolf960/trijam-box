@@ -1,0 +1,306 @@
+[gd_scene load_steps=20 format=3 uid="uid://bjfojy50arbmd"]
+
+[ext_resource type="Texture2D" uid="uid://bhou5pe6ph272" path="res://create_xray.png" id="1_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://btop5pjrynjen" path="res://background.png" id="1_dg77c"]
+[ext_resource type="Script" uid="uid://dkbn5qmh20u4j" path="res://crate.gd" id="1_h2yge"]
+[ext_resource type="Shader" uid="uid://duum78a2ssjbj" path="res://conveyor.gdshader" id="2_7mycd"]
+[ext_resource type="Texture2D" uid="uid://bp1iius0o6tps" path="res://machine.png" id="2_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://dxdr747iieawd" path="res://crates_study_x2.png" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://1rnbogpqwnt8" path="res://machine_cover.png" id="3_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://c6rbe3o205xjj" path="res://stripes.jpg" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://rq40sbms3rus" path="res://conveyor.gd" id="4_lquwl"]
+[ext_resource type="Texture2D" uid="uid://dje77nfcueajo" path="res://objects/baguette.png" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://bdkj8jrf0qldk" path="res://objects/duck.png" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://bi5pxtdgswrmw" path="res://objects/handgun.png" id="9_kek77"]
+[ext_resource type="Texture2D" uid="uid://cd4ngfjovjq5i" path="res://objects/prime.png" id="10_4c57u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7mycd"]
+size = Vector2(121513, 215)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
+shader = ExtResource("2_7mycd")
+shader_parameter/offset_x = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ycdy4"]
+size = Vector2(482, 355)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvp3"]
+size = Vector2(256, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
+size = Vector2(256, 34)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dg77c"]
+size = Vector2(37, 432)
+
+[node name="Main" type="Node2D"]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="HUD"]
+offset_left = 445.0
+offset_top = 71.0
+offset_right = 495.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="HUD"]
+offset_left = 708.0
+offset_top = 71.0
+offset_right = 758.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.728822, 0.728822, 0.728822, 1)
+position = Vector2(574, 327)
+texture = ExtResource("1_dg77c")
+
+[node name="revealArea" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(600.5, 230)
+texture = ExtResource("2_ycdy4")
+
+[node name="Cover" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+z_index = 2
+position = Vector2(600.5, 230)
+texture = ExtResource("3_ycdy4")
+
+[node name="Conveyor" type="StaticBody2D" parent="." node_paths=PackedStringArray("boxes_root")]
+script = ExtResource("4_lquwl")
+boxes_root = NodePath("../crateManager")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyor"]
+position = Vector2(-56804.5, 538.5)
+shape = SubResource("RectangleShape2D_7mycd")
+
+[node name="TextureRect" type="TextureRect" parent="Conveyor"]
+modulate = Color(0.83294916, 0.81257516, 0, 1)
+material = SubResource("ShaderMaterial_272bh")
+offset_left = -624.0
+offset_top = 431.0
+offset_right = 484.5
+offset_bottom = 542.5
+scale = Vector2(2, 2)
+texture = ExtResource("4_1bvp3")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ScannerArea" type="Area2D" parent="Conveyor" groups=["xray_machine"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyor/ScannerArea"]
+position = Vector2(602, 247.5)
+shape = SubResource("RectangleShape2D_ycdy4")
+
+[node name="crateManager" type="Node2D" parent="."]
+
+[node name="Crate" type="RigidBody2D" parent="crateManager" groups=["boxes"]]
+position = Vector2(-706, 206)
+mass = 5.0
+script = ExtResource("1_h2yge")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/Crate"]
+shape = SubResource("RectangleShape2D_1bvp3")
+
+[node name="inside" type="Sprite2D" parent="crateManager/Crate"]
+texture = ExtResource("1_0xm2m")
+
+[node name="Cover" type="Sprite2D" parent="crateManager/Crate"]
+z_index = 1
+texture = ExtResource("3_h2yge")
+
+[node name="CrateWalls" type="StaticBody2D" parent="crateManager/Crate"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/Crate/CrateWalls"]
+position = Vector2(0, -111)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crateManager/Crate/CrateWalls"]
+position = Vector2(0, 113)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="crateManager/Crate/CrateWalls"]
+position = Vector2(-112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="crateManager/Crate/CrateWalls"]
+position = Vector2(112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="Baguette" type="RigidBody2D" parent="crateManager/Crate"]
+position = Vector2(0, -45)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="crateManager/Crate/Baguette"]
+scale = Vector2(0.21626297, 0.21626298)
+texture = ExtResource("5_lquwl")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="crateManager/Crate/Baguette"]
+scale = Vector2(0.21626297, 0.21626298)
+polygon = PackedVector2Array(356.90002, -144.5, 355, -144.5, 33, -76.5, 31.799988, -76.5, -230.5, -5.300003, -320.7, 7.300003, -325.4, 2.5, -332.3, 2.5, -336.9, 9.899994, -357.1, 12.5, -361.3, 12.5, -399.3, 43.5, -402.6, 43.5, -408.5, 73, -408.5, 99.5, -397.5, 127.5, -397.5, 131.6, -370.9, 144.5, -300.4, 144.5, -281.5, 137.70001, -275.2, 142.5, -266.5, 142.5, -266.5, 134.5, -246.9, 134.5, 37.600006, 66.3, 45.5, 69.5, 53.5, 69.5, 53.5, 61.600006, 67.5, 59.199997, 79.79999, 62.5, 84.399994, 62.5, 89.29999, 53.800003, 153.09998, 42, 155.40002, 46.5, 165.5, 46.5, 165.5, 37.600006, 185.09998, 34, 187.40002, 38.5, 196.29999, 38.5, 198.70001, 29.699997, 246.5, 20.600006, 246.5, 19.600006, 255, 21.5, 261.5, 21.5, 261.5, 14.5, 286.59998, 14.5, 287.90002, 7.699997, 342.7, -1.5, 344.90002, -1.5, 362.40002, -11.899994, 370.8, -9.5, 377.5, -9.5, 377.5, -19.699997, 401.90002, -34.5, 405.09998, -34.5, 408.5, -44.699997, 408.5, -111.6, 389.5, -135.3, 389.5, -138.7)
+
+[node name="Duck" type="RigidBody2D" parent="crateManager/Crate"]
+position = Vector2(35, 35)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="crateManager/Crate/Duck"]
+scale = Vector2(0.21626297, 0.21626298)
+texture = ExtResource("6_7mycd")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="crateManager/Crate/Duck"]
+scale = Vector2(0.21626297, 0.21626298)
+polygon = PackedVector2Array(-60, -234.9, -60, -232.7, -105.3, -224.5, -110.2, -224.5, -148.2, -204.5, -151.3, -204.5, -186.3, -164.5, -188.4, -164.5, -214, -100.7, -257, -80.5, -265.3, -80.5, -251, -53.399994, -251, -50.5, -209.2, -28.5, -208.5, -28.5, -195.4, -11.600006, -238.9, 27.5, -242, 27.5, -255, 83.5, -258.3, 83.5, -243, 148.20001, -243, 151.4, -200, 200.4, -200, 202.9, -137, 227.79999, -137, 230, -50, 239.9, -50, 241.9, 67.399994, 233.5, 75.600006, 233.5, 146.79999, 216.5, 150.4, 216.5, 175.40002, 201.5, 178.29999, 201.5, 228.29999, 143.5, 230.29999, 143.5, 253.29999, 90.5, 255.20001, 90.5, 263.2, 41.5, 266, 41.5, 257, -6.899994, 257, -11.600006, 235, -32.699997, 235, -35.5, 217.59998, -39.5, 200.70001, -39.5, 101.899994, -25.800003, 112, -44.5, 114, -44.5, 121, -76.5, 123.5, -76.5, 119, -125, 119, -129.7, 101, -165.7, 101, -168.6, 79, -190.6, 79, -192.4, 41, -214.4, 41, -216.3, -1, -228.3, -1, -230.1)
+
+[node name="Colision" type="Area2D" parent="crateManager/Crate"]
+
+[node name="DetectionColision" type="CollisionShape2D" parent="crateManager/Crate/Colision"]
+shape = SubResource("RectangleShape2D_1bvp3")
+
+[node name="Crate2" type="RigidBody2D" parent="crateManager" groups=["boxes"]]
+position = Vector2(-1554, 252)
+mass = 5.0
+script = ExtResource("1_h2yge")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/Crate2"]
+shape = SubResource("RectangleShape2D_1bvp3")
+
+[node name="inside" type="Sprite2D" parent="crateManager/Crate2"]
+texture = ExtResource("1_0xm2m")
+
+[node name="Cover" type="Sprite2D" parent="crateManager/Crate2"]
+z_index = 1
+texture = ExtResource("3_h2yge")
+
+[node name="CrateWalls" type="StaticBody2D" parent="crateManager/Crate2"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/Crate2/CrateWalls"]
+position = Vector2(0, -111)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crateManager/Crate2/CrateWalls"]
+position = Vector2(0, 113)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="crateManager/Crate2/CrateWalls"]
+position = Vector2(-112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="crateManager/Crate2/CrateWalls"]
+position = Vector2(112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="Baguette" type="RigidBody2D" parent="crateManager/Crate2"]
+position = Vector2(0, -45)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="crateManager/Crate2/Baguette"]
+scale = Vector2(0.21626297, 0.21626298)
+texture = ExtResource("5_lquwl")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="crateManager/Crate2/Baguette"]
+scale = Vector2(0.21626297, 0.21626298)
+polygon = PackedVector2Array(356.90002, -144.5, 355, -144.5, 33, -76.5, 31.799988, -76.5, -230.5, -5.300003, -320.7, 7.300003, -325.4, 2.5, -332.3, 2.5, -336.9, 9.899994, -357.1, 12.5, -361.3, 12.5, -399.3, 43.5, -402.6, 43.5, -408.5, 73, -408.5, 99.5, -397.5, 127.5, -397.5, 131.6, -370.9, 144.5, -300.4, 144.5, -281.5, 137.70001, -275.2, 142.5, -266.5, 142.5, -266.5, 134.5, -246.9, 134.5, 37.600006, 66.3, 45.5, 69.5, 53.5, 69.5, 53.5, 61.600006, 67.5, 59.199997, 79.79999, 62.5, 84.399994, 62.5, 89.29999, 53.800003, 153.09998, 42, 155.40002, 46.5, 165.5, 46.5, 165.5, 37.600006, 185.09998, 34, 187.40002, 38.5, 196.29999, 38.5, 198.70001, 29.699997, 246.5, 20.600006, 246.5, 19.600006, 255, 21.5, 261.5, 21.5, 261.5, 14.5, 286.59998, 14.5, 287.90002, 7.699997, 342.7, -1.5, 344.90002, -1.5, 362.40002, -11.899994, 370.8, -9.5, 377.5, -9.5, 377.5, -19.699997, 401.90002, -34.5, 405.09998, -34.5, 408.5, -44.699997, 408.5, -111.6, 389.5, -135.3, 389.5, -138.7)
+
+[node name="Duck" type="RigidBody2D" parent="crateManager/Crate2"]
+position = Vector2(35, 35)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="crateManager/Crate2/Duck"]
+scale = Vector2(0.101, 0.101)
+texture = ExtResource("9_kek77")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="crateManager/Crate2/Duck"]
+scale = Vector2(0.101, 0.101)
+polygon = PackedVector2Array(454.5, -425.7, 429.19995, -426, 330.5, -406.1, 330.5, -405.1, 140.5, -406, 111.79999, -406, 78.70001, -396, 74.5, -396, 74.5, -397, -62.400024, -397, -76.5, -403.3, -76.5, -406, -278.5, -407, -569.1, -407, -576.5, -426, -642.3, -426, -653.3, -408, -664.7, -408, -672.5, -391.1, -672.5, -388.1, -678.7, -385, -682.6, -385, -685.5, -370.5, -685.5, -266.1, -682.5, -215.7, -682.5, -204.6, -665.5, -176.6, -665.5, -172, -487.5, -171, -416.5, -171, -416.5, -153.6, -406.5, -145.70001, -406.5, -142, -365.1, -142, -358.4, -159, -343.5, -159, -340.5, -146.4, -340.5, -141, -306.1, -141, -295.5, -154.20001, -295.5, -159, -281.5, -159, -277.5, -141, -241.9, -141, -235.9, -159, -219.5, -159, -215.5, -141, -178.5, -141, -174.5, -159, -156.70001, -159, -154.5, -146.70001, -154.5, -141, -113.900024, -141, -101.900024, -126.20001, -85.5, -37.700012, -85.5, -33, -45.5, 10, -45.5, 12.700012, -1.2000122, 26, 155.40002, 26, 202.40002, 47, 224.79999, 81, 317.5, 383.59998, 287.40002, 397, 280.8, 397, 289.5, 425.8, 374.30005, 426, 615.5, 390, 622.30005, 390, 650.4, 381, 653.80005, 381, 666.80005, 366, 672.80005, 366, 561.30005, 80.70001, 571.69995, 79, 577.4, 79, 583.5, 68.29999, 583.5, 61.700012, 535.4, -22, 525.5, -55.799988, 525.5, -68.29999, 534.5, -99.29999, 534.5, -100.29999, 556, -125.70001, 645.5, -168, 648.69995, -168, 672.69995, -194, 674.69995, -194, 685.5, -217.3, 685.5, -238.2, 679.6, -250, 672.4, -250, 643.6, -221.3, 610.30005, -206, 553.1, -206, 538, -216, 529.1, -237.9, 535.19995, -263.5, 593.4, -285, 598.19995, -285, 610.5, -324.2, 610.5, -331.5, 585.5, -350.5, 585.5, -355.5, 544.6, -344.5, 531.5, -362.6, 531.5, -368.5, 507, -362, 502, -362, 500.40002, -348.3, 486.5, -380.1, 486.5, -382.7)
+
+[node name="Crate3" type="RigidBody2D" parent="crateManager" groups=["boxes"]]
+position = Vector2(-2438, 232)
+mass = 5.0
+script = ExtResource("1_h2yge")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/Crate3"]
+shape = SubResource("RectangleShape2D_1bvp3")
+
+[node name="inside" type="Sprite2D" parent="crateManager/Crate3"]
+texture = ExtResource("1_0xm2m")
+
+[node name="Cover" type="Sprite2D" parent="crateManager/Crate3"]
+z_index = 1
+texture = ExtResource("3_h2yge")
+
+[node name="CrateWalls" type="StaticBody2D" parent="crateManager/Crate3"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/Crate3/CrateWalls"]
+position = Vector2(0, -111)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crateManager/Crate3/CrateWalls"]
+position = Vector2(0, 113)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="crateManager/Crate3/CrateWalls"]
+position = Vector2(-112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="crateManager/Crate3/CrateWalls"]
+position = Vector2(112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="Baguette" type="RigidBody2D" parent="crateManager/Crate3"]
+position = Vector2(0, -45)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="crateManager/Crate3/Baguette"]
+position = Vector2(-42, 36)
+scale = Vector2(0.21626297, 0.21626298)
+texture = ExtResource("10_4c57u")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="crateManager/Crate3/Baguette"]
+position = Vector2(-42, 36)
+scale = Vector2(0.21626297, 0.21626298)
+polygon = PackedVector2Array(-27, -287.6, -27, -285.2, -59.399994, -279, -64.5, -279, -69, -237.3, -69, -221.3, -67, -220, -67, -208.4, -58, -205.5, -58, -199.7, -85.600006, -160, -87.5, -160, -105.5, -109, -108, -109, -108, 247.09998, -94, 261, -94, 264.2, -39, 273.2, -39, 275.3, 59.299988, 270, 65.79999, 270, 89.70001, 262, 94.70001, 262, 97.70001, 252, 100, 252, 100, -106.899994, 83, -151.1, 83, -153.6, 51, -200, 51, -205.7, 54.100006, -207, 57.200012, -207, 59.899994, -212.9, 54, -219.5, 55.700012, -220, 62.799988, -220, 56, -241.9, 56, -278.5)
+
+[node name="Duck" type="RigidBody2D" parent="crateManager/Crate3"]
+position = Vector2(35, 35)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="crateManager/Crate3/Duck"]
+scale = Vector2(0.21626297, 0.21626298)
+texture = ExtResource("6_7mycd")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="crateManager/Crate3/Duck"]
+scale = Vector2(0.21626297, 0.21626298)
+polygon = PackedVector2Array(-60, -234.9, -60, -232.7, -105.3, -224.5, -110.2, -224.5, -148.2, -204.5, -151.3, -204.5, -186.3, -164.5, -188.4, -164.5, -214, -100.7, -257, -80.5, -265.3, -80.5, -251, -53.399994, -251, -50.5, -209.2, -28.5, -208.5, -28.5, -195.4, -11.600006, -238.9, 27.5, -242, 27.5, -255, 83.5, -258.3, 83.5, -243, 148.20001, -243, 151.4, -200, 200.4, -200, 202.9, -137, 227.79999, -137, 230, -50, 239.9, -50, 241.9, 67.399994, 233.5, 75.600006, 233.5, 146.79999, 216.5, 150.4, 216.5, 175.40002, 201.5, 178.29999, 201.5, 228.29999, 143.5, 230.29999, 143.5, 253.29999, 90.5, 255.20001, 90.5, 263.2, 41.5, 266, 41.5, 257, -6.899994, 257, -11.600006, 235, -32.699997, 235, -35.5, 217.59998, -39.5, 200.70001, -39.5, 101.899994, -25.800003, 112, -44.5, 114, -44.5, 121, -76.5, 123.5, -76.5, 119, -125, 119, -129.7, 101, -165.7, 101, -168.6, 79, -190.6, 79, -192.4, 41, -214.4, 41, -216.3, -1, -228.3, -1, -230.1)
+
+[node name="wall" type="Area2D" parent="crateManager" groups=["approval_wall"]]
+position = Vector2(859, 215)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="crateManager/wall"]
+shape = SubResource("RectangleShape2D_dg77c")
+disabled = true
+
+[connection signal="area_entered" from="crateManager/Crate/Colision" to="crateManager/Crate" method="_on_colision_area_entered"]
+[connection signal="area_exited" from="crateManager/Crate/Colision" to="crateManager/Crate" method="_on_colision_area_exited"]

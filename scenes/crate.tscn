@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://bmnw0poc8ngi4"]
+
+[ext_resource type="Script" uid="uid://dkbn5qmh20u4j" path="res://crate.gd" id="1_kn6iu"]
+[ext_resource type="Texture2D" uid="uid://bhou5pe6ph272" path="res://create_xray.png" id="2_74u5o"]
+[ext_resource type="Texture2D" uid="uid://dxdr747iieawd" path="res://crates_study_x2.png" id="3_1kl6c"]
+[ext_resource type="Texture2D" uid="uid://dje77nfcueajo" path="res://objects/baguette.png" id="4_74u5o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvp3"]
+size = Vector2(256, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
+size = Vector2(256, 34)
+
+[node name="Crate" type="RigidBody2D" groups=["boxes"]]
+mass = 5.0
+script = ExtResource("1_kn6iu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1bvp3")
+
+[node name="inside" type="Sprite2D" parent="."]
+texture = ExtResource("2_74u5o")
+
+[node name="Cover" type="Sprite2D" parent="."]
+texture = ExtResource("3_1kl6c")
+
+[node name="CrateWalls" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrateWalls"]
+position = Vector2(0, -111)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="CrateWalls"]
+position = Vector2(0, 113)
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="CrateWalls"]
+position = Vector2(-112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="CrateWalls"]
+position = Vector2(112, 0)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_lquwl")
+
+[node name="Baguette" type="StaticBody2D" parent="."]
+position = Vector2(510, 182)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Baguette"]
+scale = Vector2(0.21626297, 0.21626298)
+texture = ExtResource("4_74u5o")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Baguette"]
+scale = Vector2(0.21626297, 0.21626298)
+polygon = PackedVector2Array(356.90002, -144.5, 355, -144.5, 33, -76.5, 31.799988, -76.5, -230.5, -5.300003, -320.7, 7.300003, -325.4, 2.5, -332.3, 2.5, -336.9, 9.899994, -357.1, 12.5, -361.3, 12.5, -399.3, 43.5, -402.6, 43.5, -408.5, 73, -408.5, 99.5, -397.5, 127.5, -397.5, 131.6, -370.9, 144.5, -300.4, 144.5, -281.5, 137.70001, -275.2, 142.5, -266.5, 142.5, -266.5, 134.5, -246.9, 134.5, 37.600006, 66.3, 45.5, 69.5, 53.5, 69.5, 53.5, 61.600006, 67.5, 59.199997, 79.79999, 62.5, 84.399994, 62.5, 89.29999, 53.800003, 153.09998, 42, 155.40002, 46.5, 165.5, 46.5, 165.5, 37.600006, 185.09998, 34, 187.40002, 38.5, 196.29999, 38.5, 198.70001, 29.699997, 246.5, 20.600006, 246.5, 19.600006, 255, 21.5, 261.5, 21.5, 261.5, 14.5, 286.59998, 14.5, 287.90002, 7.699997, 342.7, -1.5, 344.90002, -1.5, 362.40002, -11.899994, 370.8, -9.5, 377.5, -9.5, 377.5, -19.699997, 401.90002, -34.5, 405.09998, -34.5, 408.5, -44.699997, 408.5, -111.6, 389.5, -135.3, 389.5, -138.7)
